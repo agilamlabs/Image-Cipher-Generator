@@ -14,26 +14,29 @@ import io
 # Function to apply a simple cipher to the image
 def cipher_image(image, shift_value=50):
     # Convert image to numpy array
-    img_array = np.array(image)
+    img_array = np.array(image, dtype='int16')  # Use int16 to prevent overflow during calculations
 
     # Apply a simple cipher (e.g., shift RGB values)
     img_array = (img_array + shift_value) % 256
 
-    # Convert back to image
-    ciphered_image = Image.fromarray(img_array.astype('uint8'))
+    # Convert back to uint8 for image format
+    img_array = np.clip(img_array, 0, 255).astype('uint8')
+    ciphered_image = Image.fromarray(img_array)
     return ciphered_image
 
 # Function to decipher the image
 def decipher_image(image, shift_value=50):
     # Convert image to numpy array
-    img_array = np.array(image)
+    img_array = np.array(image, dtype='int16')  # Use int16 to prevent overflow during calculations
 
     # Apply a simple decipher (reverse the shift)
     img_array = (img_array - shift_value) % 256
 
-    # Convert back to image
-    deciphered_image = Image.fromarray(img_array.astype('uint8'))
+    # Convert back to uint8 for image format
+    img_array = np.clip(img_array, 0, 255).astype('uint8')
+    deciphered_image = Image.fromarray(img_array)
     return deciphered_image
+
 
 # Streamlit interface
 st.title("Image Cipher Generator")
